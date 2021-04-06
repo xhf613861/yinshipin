@@ -21,10 +21,10 @@ void MainWindow::on_pushButton_clicked()
     if (_pAudioThread == nullptr)
     {
         _pAudioThread = new AudioThread(this);
-        connect(_pAudioThread, &AudioThread::finished, [this](){
-            _pAudioThread = nullptr;
-            ui->pushButton->setText("开始录音");
-        });
+//        connect(_pAudioThread, &AudioThread::finished, [this](){
+//            _pAudioThread = nullptr;
+//            ui->pushButton->setText("开始录音");
+//        });
         _pAudioThread->start();
         ui->pushButton->setText("结束录音");
     }

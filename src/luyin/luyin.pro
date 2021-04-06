@@ -32,7 +32,8 @@ win32 {
     LIBS += -L../../lib \
             -lavdevice \
             -lavformat \
-            -lavutil
+            -lavutil \
+            -lSDL2
 }
 
 # Default rules for deployment.
