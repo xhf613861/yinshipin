@@ -14,7 +14,7 @@ private:
     void run() override;
 
 signals:
-
+    void audioTime(int audioTime);
 };
 
 #endif // AUDIOTHREAD_H

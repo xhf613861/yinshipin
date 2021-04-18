@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 
 #include "AudioThread.h"
+#include "PlayThread.h"
+#include "FFmpegs.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,20 +18,74 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_pushButton_Audio_clicked()
 {
     if (_pAudioThread == nullptr)
     {
         _pAudioThread = new AudioThread(this);
-//        connect(_pAudioThread, &AudioThread::finished, [this](){
-//            _pAudioThread = nullptr;
-//            ui->pushButton->setText("开始录音");
-//        });
+
+        connect(_pAudioThread, &AudioThread::finished, [this](){
+            _pAudioThread = nullptr;
+            ui->pushButton_Audio->setText("开始录音");
+        });
+
+        connect(_pAudioThread, &AudioThread::audioTime, [this](int audioTime){
+            ui->label_AudioTime->setText(QString::number(audioTime));
+        });
+
         _pAudioThread->start();
-        ui->pushButton->setText("结束录音");
+        ui->pushButton_Audio->setText("停止录音");
     }
     else
     {
         _pAudioThread->requestInterruption();
+        _pAudioThread = nullptr;
+        ui->pushButton_Audio->setText("开始录音");
     }
+}
+
+void MainWindow::on_pushButton_Play_clicked()
+{
+    if (_pPlayThread == nullptr)
+    {
+        _pPlayThread = new PlayThread(this);
+        connect(_pPlayThread, &PlayThread::finished, [this](){
+            _pPlayThread = nullptr;
+            ui->pushButton_Play->setText("开始播放");
+        });
+
+        connect(_pPlayThread, &PlayThread::notifyAllTime, [this](int allTime){
+            ui->label_AllTime->setText(QString("%1毫秒").arg(allTime));
+        });
+
+        connect(_pPlayThread, &PlayThread::notifyRemainTime, [this](int remainTime){
+            ui->label_hasTime->setText(QString("%1毫秒").arg(remainTime));
+        });
+
+        _pPlayThread->start();
+        ui->pushButton_Play->setText("停止播放");
+    }
+    else
+    {
+        _pPlayThread->requestInterruption();
+        _pPlayThread = nullptr;
+        ui->pushButton_Play->setText("开始播放");
+    }
+}
+
+void MainWindow::on_pushButton_Wav_clicked()
+{
+    // 封装WAV的头部
+    WAVHeader header;
+    header.riffNumChannels = 2;
+    header.riffSampleRate = 44100;
+    header.riffBitsPerSample = 16;
+
+//    header.numChannels = 2;
+//    header.sampleRate = 44100;
+//    header.bitsPerSample = 16;
+
+    // 调用函数
+    FFmpegs::pcm2wav(header, "E:/out.pcm", "E:/out.wav");
+
 }

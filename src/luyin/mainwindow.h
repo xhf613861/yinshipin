@@ -8,6 +8,7 @@ namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 class AudioThread;
+class PlayThread;
 
 class MainWindow : public QMainWindow
 {
@@ -18,11 +19,16 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_pushButton_Audio_clicked();
+
+    void on_pushButton_Play_clicked();
+
+    void on_pushButton_Wav_clicked();
 
 private:
     Ui::MainWindow *ui;
 
     AudioThread *_pAudioThread = nullptr;
+    PlayThread *_pPlayThread = nullptr;
 };
 #endif // MAINWINDOW_H

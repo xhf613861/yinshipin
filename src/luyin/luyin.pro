@@ -17,11 +17,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     AudioThread.cpp \
+    FFmpegs.cpp \
+    PlayThread.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     AudioThread.h \
+    Core.h \
+    FFmpegs.h \
+    PlayThread.h \
     mainwindow.h
 
 FORMS += \

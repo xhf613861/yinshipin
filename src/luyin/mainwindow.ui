@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="pushButton_Play">
     <property name="geometry">
      <rect>
       <x>70</x>
@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>开始录音</string>
+     <string>开始播放</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="radioButton">
@@ -38,6 +38,110 @@
     </property>
     <property name="text">
      <string>RadioButton</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Audio">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>350</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>开始录音</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>150</y>
+      <width>54</width>
+      <height>12</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>总时长：</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_AllTime">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>150</y>
+      <width>54</width>
+      <height>12</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>150</y>
+      <width>54</width>
+      <height>12</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>剩余时长：</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_hasTime">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>150</y>
+      <width>54</width>
+      <height>12</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>360</y>
+      <width>54</width>
+      <height>12</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>录音时长：</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_AudioTime">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>360</y>
+      <width>54</width>
+      <height>12</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>3333</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Wav">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>450</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>生成WAV</string>
     </property>
    </widget>
   </widget>
