@@ -25,6 +25,8 @@ private slots:
 
     void on_pushButton_Wav_clicked();
 
+    void on_pushButton_Resample_clicked();
+
 private:
     Ui::MainWindow *ui;
 

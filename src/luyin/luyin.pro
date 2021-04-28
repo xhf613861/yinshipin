@@ -19,6 +19,7 @@ SOURCES += \
     AudioThread.cpp \
     FFmpegs.cpp \
     PlayThread.cpp \
+    ResampleThread.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -27,6 +28,8 @@ HEADERS += \
     Core.h \
     FFmpegs.h \
     PlayThread.h \
+    ResampleThread.h \
+    ffmpegCmd.h \
     mainwindow.h
 
 FORMS += \
@@ -38,7 +41,9 @@ win32 {
             -lavdevice \
             -lavformat \
             -lavutil \
-            -lSDL2
+            -lSDL2 \
+            -lavcodec \
+            -lswresample
 }
 
 # Default rules for deployment.

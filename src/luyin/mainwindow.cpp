@@ -5,6 +5,8 @@
 #include "PlayThread.h"
 #include "FFmpegs.h"
 
+#include <ResampleThread.h>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -88,4 +90,10 @@ void MainWindow::on_pushButton_Wav_clicked()
     // 调用函数
     FFmpegs::pcm2wav(header, "E:/out.pcm", "E:/out.wav");
 
+}
+
+void MainWindow::on_pushButton_Resample_clicked()
+{
+    ResampleThread *pResampleThread = new ResampleThread;
+    pResampleThread->start();
 }

@@ -31,6 +31,26 @@ AudioThread::~AudioThread()
     qDebug() << "AudioThread xigou";
 }
 
+// 从AVFormatContext中获取录音设备的相关参数
+void showSpec(AVFormatContext *ctx)
+{
+    // 获取输入流
+    AVStream *stream = ctx->streams[0];
+    // 获取音频参数
+    AVCodecParameters *params = stream->codecpar;
+    // 声道数
+    qDebug() << params->channels;
+    // 采样率
+    qDebug() << params->sample_rate;
+    // 采样格式
+    qDebug() << params->format;
+    // 每一个样本的一个声道占用多少个字节
+    qDebug() << av_get_bytes_per_sample((AVSampleFormat) params->format);
+    // 编码ID（可以看出采样格式）
+    qDebug() << params->codec_id;
+    // 每一个样本的一个声道占用多少位（这个函数需要用到avcodec库）
+    qDebug() << av_get_bits_per_sample(params->codec_id);
+}
 
 void AudioThread::run()
 {
