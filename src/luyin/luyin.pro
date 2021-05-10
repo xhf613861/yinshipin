@@ -45,6 +45,7 @@ macx {
 
 SOURCES += \
     AudioThread.cpp \
+    DecodeThread.cpp \
     EncodeThread.cpp \
     FFmpegs.cpp \
     PlayThread.cpp \
@@ -55,6 +56,7 @@ SOURCES += \
 HEADERS += \
     AudioThread.h \
     Core.h \
+    DecodeThread.h \
     EncodeThread.h \
     FFmpegs.h \
     PlayThread.h \

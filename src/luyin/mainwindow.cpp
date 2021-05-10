@@ -5,6 +5,7 @@
 #include "PlayThread.h"
 #include "FFmpegs.h"
 #include "EncodeThread.h"
+#include "DecodeThread.h"
 
 #include <ResampleThread.h>
 
@@ -112,5 +113,21 @@ void MainWindow::on_pushButton_aacEncode_clicked()
 
         _pEncodeThread->start();
         ui->pushButton_aacEncode->setText("编码中");
+    }
+}
+
+void MainWindow::on_pushButton_aacDcode_clicked()
+{
+    if (_pDcodeThread == nullptr)
+    {
+        _pDcodeThread = new DecodeThread(this);
+
+        connect(_pDcodeThread, &DecodeThread::finished, [this](){
+            _pDcodeThread = nullptr;
+            ui->pushButton_aacDcode->setText("aac解码");
+        });
+
+        _pDcodeThread->start();
+        ui->pushButton_aacDcode->setText("解码中");
     }
 }
