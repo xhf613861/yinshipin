@@ -9,6 +9,7 @@ extern "C"
 #include <libavdevice/avdevice.h>
 #include <libavformat/avformat.h>
 #include <libavutil/avutil.h>
+//#include <SDL2/SDL.h>
 #include <SDL2/SDL.h>
 }
 

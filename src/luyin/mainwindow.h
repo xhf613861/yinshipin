@@ -9,6 +9,7 @@ QT_END_NAMESPACE
 
 class AudioThread;
 class PlayThread;
+class EncodeThread;
 
 class MainWindow : public QMainWindow
 {
@@ -27,10 +28,13 @@ private slots:
 
     void on_pushButton_Resample_clicked();
 
+    void on_pushButton_aacEncode_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     AudioThread *_pAudioThread = nullptr;
     PlayThread *_pPlayThread = nullptr;
+    EncodeThread *_pEncodeThread = nullptr;
 };
 #endif // MAINWINDOW_H

@@ -5,7 +5,7 @@
  * 查看设备命令
  * ffmpeg -f dshow -list_devices true -i dummy
  * 录音命令
- * ffmpeg -f dshow -i audio="麦克风 (2- EDIFIER G4)" out222.wav
+ * ffmpeg -f dshow -i audio="麦克风 (USB Audio Device)" out222.wav
  * 播放命令
  * ffplay out.wav
  * ffplay -ar 44100 -ac 2 -f s16le out.pcm

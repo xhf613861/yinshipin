@@ -5,11 +5,16 @@ extern "C"
 {
 //#include <libavdevice/avdevice.h>
 #include <libavformat/avformat.h>
-//#include <libavutil/avutil.h>
+#include <libavutil/avutil.h>
+#include <libavcodec/avcodec.h>
 }
 
 #define AUDIO_FORMAT_PCM 1
 #define AUDIO_FORMAT_FLOAT 3
+
+#define ERROR_BUFF(ret) \
+    char errbuf[1024]; \
+    av_strerror(ret, errbuf, sizeof (errbuf));
 
 typedef struct
 {
@@ -39,6 +44,14 @@ typedef struct
 
 } WAVHeader;
 
+typedef struct
+{
+    const char *filename;
+    int sampleRate;
+    AVSampleFormat sampleFmt;
+    int chLayout;
+}AudioEncodeSpec;
+
 
 class FFmpegs
 {
@@ -48,6 +61,9 @@ public:
     static void pcm2wav(WAVHeader &header,
                         const char *pcmFilename,
                         const char *wavFilename);
+
+    static void aacEncode(AudioEncodeSpec &in,
+                          const char *outFilename);
 };
 
 

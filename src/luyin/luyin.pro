@@ -15,8 +15,37 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+win32 {
+    INCLUDEPATH += $$(FFMPEG_HOME)/include
+    LIBS += -L$$(FFMPEG_HOME)/lib \
+            -lavcodec \
+            -lavdevice \
+            -lavfilter \
+            -lavformat \
+            -lavutil \
+            -lpostproc \
+            -lswscale \
+            -lswresample
+}
+
+# mac
+macx {
+    INCLUDEPATH += $$(FFMPEG_HOME)/include
+    LIBS += -L$$(FFMPEG_HOME)/lib \
+            -lavcodec \
+            -lavdevice \
+            -lavfilter \
+            -lavformat \
+            -lavutil \
+            -lpostproc \
+            -lswscale \
+            -lswresample \
+            -lavresample
+}
+
 SOURCES += \
     AudioThread.cpp \
+    EncodeThread.cpp \
     FFmpegs.cpp \
     PlayThread.cpp \
     ResampleThread.cpp \
@@ -26,6 +55,7 @@ SOURCES += \
 HEADERS += \
     AudioThread.h \
     Core.h \
+    EncodeThread.h \
     FFmpegs.h \
     PlayThread.h \
     ResampleThread.h \

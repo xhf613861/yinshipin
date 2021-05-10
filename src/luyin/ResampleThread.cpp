@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QFile>
+#include "FFmpegs.h"
 
 // 导入头文件
 extern "C"
@@ -10,9 +11,7 @@ extern "C"
 #include <libavutil/avutil.h>
 }
 
-#define ERROR_BUFF(ret) \
-    char errbuf[1024]; \
-    av_strerror(ret, errbuf, sizeof (errbuf));
+
 
 ResampleThread::ResampleThread()
 {

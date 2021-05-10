@@ -4,7 +4,7 @@
 #ifdef Q_OS_WIN
     // 格式名称
     #define FMT_NAME "dshow"
-    #define DEVICE_NAME "audio=麦克风 (2- EDIFIER G4)"
+    #define DEVICE_NAME "audio=麦克风 (USB Audio Device)"
     #define FILENAME "E:/out.pcm"
 #else
     #define FMT_NAME "avfoundation"

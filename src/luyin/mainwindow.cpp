@@ -4,6 +4,7 @@
 #include "AudioThread.h"
 #include "PlayThread.h"
 #include "FFmpegs.h"
+#include "EncodeThread.h"
 
 #include <ResampleThread.h>
 
@@ -96,4 +97,20 @@ void MainWindow::on_pushButton_Resample_clicked()
 {
     ResampleThread *pResampleThread = new ResampleThread;
     pResampleThread->start();
+}
+
+void MainWindow::on_pushButton_aacEncode_clicked()
+{
+    if (_pEncodeThread == nullptr)
+    {
+        _pEncodeThread = new EncodeThread(this);
+
+        connect(_pEncodeThread, &EncodeThread::finished, [this](){
+            _pEncodeThread = nullptr;
+            ui->pushButton_aacEncode->setText("aac编码");
+        });
+
+        _pEncodeThread->start();
+        ui->pushButton_aacEncode->setText("编码中");
+    }
 }
