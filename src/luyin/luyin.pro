@@ -45,22 +45,26 @@ macx {
 
 SOURCES += \
     AudioThread.cpp \
+    CustomDrawThread.cpp \
     DecodeThread.cpp \
     EncodeThread.cpp \
     FFmpegs.cpp \
     PlayThread.cpp \
     ResampleThread.cpp \
+    ShowBMPThread.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     AudioThread.h \
     Core.h \
+    CustomDrawThread.h \
     DecodeThread.h \
     EncodeThread.h \
     FFmpegs.h \
     PlayThread.h \
     ResampleThread.h \
+    ShowBMPThread.h \
     ffmpegCmd.h \
     mainwindow.h
 

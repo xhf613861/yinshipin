@@ -6,6 +6,8 @@
 #include "FFmpegs.h"
 #include "EncodeThread.h"
 #include "DecodeThread.h"
+#include "ShowBMPThread.h"
+#include "CustomDrawThread.h"
 
 #include <ResampleThread.h>
 
@@ -130,4 +132,17 @@ void MainWindow::on_pushButton_aacDcode_clicked()
         _pDcodeThread->start();
         ui->pushButton_aacDcode->setText("解码中");
     }
+}
+
+void MainWindow::on_pushButton_showBMP_clicked()
+{
+    ShowBMPThread *pThread = new ShowBMPThread(this);
+    pThread->start();
+
+}
+
+void MainWindow::on_pushButton_customDraw_clicked()
+{
+    CustomDrawThread *pThread = new CustomDrawThread(this);
+    pThread->start();
 }

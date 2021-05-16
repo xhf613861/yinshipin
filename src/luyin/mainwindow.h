@@ -33,6 +33,10 @@ private slots:
 
     void on_pushButton_aacDcode_clicked();
 
+    void on_pushButton_showBMP_clicked();
+
+    void on_pushButton_customDraw_clicked();
+
 private:
     Ui::MainWindow *ui;
 
