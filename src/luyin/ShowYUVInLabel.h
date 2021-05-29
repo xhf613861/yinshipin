@@ -15,8 +15,13 @@ public:
     explicit ShowYUVInLabel(QWidget *parent = nullptr);
     ~ShowYUVInLabel();
 
+    void play();
+
 private:
     Ui::ShowYUVInLabel *ui;
+
+    QWidget *_widget;
+
 };
 
 #endif // SHOWYUVINLABEL_H

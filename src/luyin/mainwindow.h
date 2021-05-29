@@ -13,6 +13,7 @@ class EncodeThread;
 class DecodeThread;
 class VideoThread;
 class ShowYUVThread;
+class ShowYUVInLabel;
 
 class MainWindow : public QMainWindow
 {
@@ -55,5 +56,6 @@ private:
     VideoThread *_pVideoThread = nullptr;
 
     ShowYUVThread *_pShowYUVThread = nullptr;
+    ShowYUVInLabel *_pShowYUVInLabel = nullptr;
 };
 #endif // MAINWINDOW_H

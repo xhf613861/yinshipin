@@ -10,6 +10,8 @@
 #include "CustomDrawThread.h"
 #include "VideoThread.h"
 #include "ShowYUVThread.h"
+#include "PlayYUVInLabel.h"
+#include "ShowYUVInLabel.h"
 
 #include <ResampleThread.h>
 
@@ -188,5 +190,15 @@ void MainWindow::on_pushButton_showYUV_clicked()
 
 void MainWindow::on_pushButton_showYUVLabel_clicked()
 {
-
+    if (_pShowYUVInLabel == nullptr)
+    {
+        _pShowYUVInLabel = new ShowYUVInLabel();
+        _pShowYUVInLabel->show();
+        _pShowYUVInLabel->play();
+    }
+    else
+    {
+        delete _pShowYUVInLabel;
+        _pShowYUVInLabel = nullptr;
+    }
 }

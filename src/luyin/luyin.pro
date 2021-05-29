@@ -50,6 +50,7 @@ SOURCES += \
     EncodeThread.cpp \
     FFmpegs.cpp \
     PlayThread.cpp \
+    PlayYUVInLabel.cpp \
     ResampleThread.cpp \
     ShowBMPThread.cpp \
     ShowYUVInLabel.cpp \
@@ -66,6 +67,7 @@ HEADERS += \
     EncodeThread.h \
     FFmpegs.h \
     PlayThread.h \
+    PlayYUVInLabel.h \
     ResampleThread.h \
     ShowBMPThread.h \
     ShowYUVInLabel.h \
