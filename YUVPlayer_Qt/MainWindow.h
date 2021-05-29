@@ -22,6 +22,10 @@ private slots:
 
     void on_pushButton_stop_clicked();
 
+    void onPlayerStateChanged();
+
+    void on_pushButton_next_clicked();
+
 private:
     Ui::MainWindow *ui;
 

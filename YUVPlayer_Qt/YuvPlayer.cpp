@@ -1,76 +1,60 @@
 #include "YuvPlayer.h"
 
-#include <SDL2/SDL.h>
-
 #include <QDebug>
 #include <QFile>
+#include <QPainter>
+#include "FFmpegs.h"
 
 extern "C"
 {
 #include <libavutil/imgutils.h>
 }
 
-#define RET(judge, func) \
-    if (judge) { \
-        qDebug() << #func << "error" << SDL_GetError(); \
-        return; \
-    }
-
-static const std::map<AVPixelFormat, SDL_PixelFormatEnum>
-PIXEL_FORMAT_MAP = {
-    {AV_PIX_FMT_YUV420P, SDL_PIXELFORMAT_IYUV},
-    {AV_PIX_FMT_YUYV422, SDL_PIXELFORMAT_YUY2},
-    {AV_PIX_FMT_NONE, SDL_PIXELFORMAT_UNKNOWN}
-};
-
 YuvPlayer::YuvPlayer(QWidget *parent) : QWidget(parent)
 {
-    // 创建窗口
-    _window = SDL_CreateWindowFrom((void *)winId());
-    RET(!_window, SDL_CreateWindowFrom);
-
-    // 创建渲染上下文
-    _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-    if (!_renderer)
-    {
-        _renderer = SDL_CreateRenderer(_window, -1, 0);
-        RET(!_renderer, SDL_CreateRender);
-    }
+    setAttribute(Qt::WA_StyledBackground);
+    setStyleSheet("background:black");
 }
 
 YuvPlayer::~YuvPlayer()
 {
-    _file.close();
-    SDL_DestroyTexture(_texture);
-    SDL_DestroyRenderer(_renderer);
-    SDL_DestroyWindow(_window);
+    closeFile();
+    freeCurrentImage();
+    stopTimer();
 }
 
 void YuvPlayer::play()
 {
-    _timerId = startTimer(1000 / _yuv.fps);
-    _state = YuvPlayer::Playing;
+    if (_state == YuvPlayer::Playing)
+        return;
+
+    // 状态可能是：暂停、停止、正常完毕
+    _timerId = startTimer(_interval);
+    setState(YuvPlayer::Playing);
 }
 
 void YuvPlayer::pause()
 {
-    if (_timerId)
-    {
-        killTimer(_timerId);
-    }
+    if (_state != YuvPlayer::Playing)
+        return;
 
-    _state = YuvPlayer::Paused;
+    stopTimer();
+
+    // 改变状态
+    setState(YuvPlayer::Paused);
 }
 
 void YuvPlayer::stop()
 {
-    if (_timerId)
-    {
-        killTimer(_timerId);
-    }
+    if (_state == YuvPlayer::Stopped)
+        return;
 
-    _state = YuvPlayer::Stopped;
+    stopTimer();
+    freeCurrentImage();
+
+    update();
+
+    setState(YuvPlayer::Stopped);
 }
 
 bool YuvPlayer::isPlaying()
@@ -82,19 +66,56 @@ void YuvPlayer::setYuv(const Yuv &yuv)
 {
     _yuv = yuv;
 
-    // 创建纹理
-    _texture = SDL_CreateTexture(_renderer,
-                                 PIXEL_FORMAT_MAP.find(yuv.pixelFormat)->second,
-                                 SDL_TEXTUREACCESS_STREAMING,
-                                 yuv.width, yuv.height);
-    RET(!_texture, SDL_CreateTexture);
+    // 关闭上一个文件
+    closeFile();
 
     // 打开文件
-    _file.setFileName(yuv.filename);
-    if (!_file.open(QFile::ReadOnly))
+    _file = new QFile(yuv.filename);
+    if (!_file->open(QFile::ReadOnly))
     {
         qDebug() << "file open error" << yuv.filename;
     }
+
+    // 刷帧的时间间隔
+    _interval = 1000 / _yuv.fps;
+
+    // 一帧图的大小
+    _imgSize = av_image_get_buffer_size(yuv.pixelFormat,
+                                        yuv.width,
+                                        yuv.height,
+                                        1);
+
+    // 组件的尺寸
+    int w = width();
+    int h = height();
+
+    // 计算rect
+    int dx = 0;
+    int dy = 0;
+    int dw = yuv.width;
+    int dh = yuv.height;
+
+    // 计算目标尺寸
+    if (dw > w || dh > h)
+    {
+        if (dw * h > w * dh) // 视频的宽高比 》 播放器的宽高比
+        {
+            dh = w * dh / dw;
+            dw = w;
+        }
+        else
+        {
+            dw = h * dw / dh;
+            dh = h;
+        }
+    }
+
+    // 剧中
+    dx = (w - dw) >> 1;
+    dy = (h - dh) >> 1;
+
+    _dstRect = QRect(dx, dy, dw, dh);
+    qDebug() << "视频的矩形框" << dx << dy << dw << dh;
 }
 
 YuvPlayer::State YuvPlayer::getState()
@@ -105,32 +126,93 @@ YuvPlayer::State YuvPlayer::getState()
 void YuvPlayer::timerEvent(QTimerEvent *event)
 {
     // 图片大小
-    int imgSize = av_image_get_buffer_size(_yuv.pixelFormat,
-                                           _yuv.width,
-                                           _yuv.height,
-                                           1);
-
-    char data[imgSize];
-    if (_file.read(data, imgSize) > 0)
+    qDebug() << _imgSize;
+    char *data = new char[_imgSize];
+    if (_file->read(data, _imgSize) == _imgSize)
     {
-        // 将YUV的像素数据填充到texture
-        RET(SDL_UpdateTexture(_texture, nullptr, data, _yuv.width), SDL_UpdateTexture);
+        RawVideoFrame in = {
+            data,
+            _yuv.width, _yuv.height,
+            _yuv.pixelFormat
+        };
 
-        // 设置绘制颜色（画笔颜色）
-        RET(SDL_SetRenderDrawColor(_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE), SDL_SetRenderDrawColor);
 
-        // 用绘制颜色（画笔颜色）清除渲染目标
-        RET(SDL_RenderClear(_renderer), SDL_RenderClear);
+        RawVideoFrame out = {
+            nullptr,
+            _yuv.width >> 4 << 4, _yuv.height >> 4 << 4,
+            AV_PIX_FMT_RGB24
+        };
+        FFmpegs::convertRawVideo(in, out);
 
-        // 拷贝纹理数据到渲染目标（默认是window）
-        RET(SDL_RenderCopy(_renderer, _texture, nullptr, nullptr), SDL_RenderCopy);
+        freeCurrentImage();
+        _currentImage = new QImage((uchar *)out.pixels,
+                                   out.width, out.height, QImage::Format_RGB888);
 
-        // 更新所有的渲染操作到屏幕上
-        SDL_RenderPresent(_renderer);
+        update();
     }
-    else
+    else // 文件数据已经读取完毕
     {
-        // 文件数据已读取完毕
-        killTimer(_timerId);
+        stopTimer();
+
+        setState(YuvPlayer::Finished);
     }
+    delete []data;
+}
+
+void YuvPlayer::paintEvent(QPaintEvent *event)
+{
+    if (!_currentImage)
+        return;
+
+    // 将图片绘制到当前组件上
+    QPainter(this).drawImage(_dstRect, *_currentImage);
+}
+
+/** 改变状态*/
+void YuvPlayer::setState(State state)
+{
+    if (state == _state)
+        return;
+
+    if (state == YuvPlayer::Stopped
+            || state == YuvPlayer::Finished)
+    {
+        // 让文件读取指针回到文件首部
+        _file->seek(0);
+    }
+
+    _state = state;
+    emit stateChanged();
+}
+
+/** 关闭文件*/
+void YuvPlayer::closeFile()
+{
+    if (!_file)
+        return;
+
+    _file->close();
+    delete _file;
+    _file = nullptr;
+}
+
+/** 释放图片*/
+void YuvPlayer::freeCurrentImage()
+{
+    if (!_currentImage)
+        return;
+
+    free(_currentImage->bits());
+    delete _currentImage;
+    _currentImage = nullptr;
+}
+
+/** 停止定时器*/
+void YuvPlayer::stopTimer()
+{
+    if (_timerId == 0)
+        return;
+
+    killTimer(_timerId);
+    _timerId = 0;
 }

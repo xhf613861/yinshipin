@@ -46,11 +46,13 @@ macx {
 }
 
 SOURCES += \
+    FFmpegs.cpp \
     YuvPlayer.cpp \
     main.cpp \
     MainWindow.cpp
 
 HEADERS += \
+    FFmpegs.h \
     MainWindow.h \
     YuvPlayer.h
 
