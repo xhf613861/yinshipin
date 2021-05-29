@@ -11,6 +11,8 @@ class AudioThread;
 class PlayThread;
 class EncodeThread;
 class DecodeThread;
+class VideoThread;
+class ShowYUVThread;
 
 class MainWindow : public QMainWindow
 {
@@ -37,6 +39,12 @@ private slots:
 
     void on_pushButton_customDraw_clicked();
 
+    void on_pushButton_video_clicked();
+
+    void on_pushButton_showYUV_clicked();
+
+    void on_pushButton_showYUVLabel_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -44,5 +52,8 @@ private:
     PlayThread *_pPlayThread = nullptr;
     EncodeThread *_pEncodeThread = nullptr;
     DecodeThread *_pDcodeThread = nullptr;
+    VideoThread *_pVideoThread = nullptr;
+
+    ShowYUVThread *_pShowYUVThread = nullptr;
 };
 #endif // MAINWINDOW_H

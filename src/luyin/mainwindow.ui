@@ -173,8 +173,8 @@
    <widget class="QPushButton" name="pushButton_aacDcode">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>350</y>
+      <x>220</x>
+      <y>340</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -186,8 +186,8 @@
    <widget class="QPushButton" name="pushButton_showBMP">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>430</y>
+      <x>220</x>
+      <y>400</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -199,14 +199,53 @@
    <widget class="QPushButton" name="pushButton_customDraw">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>470</y>
+      <x>220</x>
+      <y>460</y>
       <width>75</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
      <string>手动绘制</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_video">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>110</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>录制视频</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_showYUV">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>180</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>显示YUV</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_showYUVLabel">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>240</y>
+      <width>151</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>显示YUV在Label</string>
     </property>
    </widget>
   </widget>

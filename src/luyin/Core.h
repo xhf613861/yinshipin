@@ -6,6 +6,9 @@
     #define FMT_NAME "dshow"
     #define DEVICE_NAME "audio=麦克风 (USB Audio Device)"
     #define FILENAME "E:/out.pcm"
+
+    #define DEVICE_VIDEO_NAME "video=PC Camera"
+    #define FILENAME_VIDEO "E:/out.yuv"
 #else
     #define FMT_NAME "avfoundation"
     #define DEVICE_NAME ":0"

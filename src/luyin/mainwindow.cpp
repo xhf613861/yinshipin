@@ -8,6 +8,8 @@
 #include "DecodeThread.h"
 #include "ShowBMPThread.h"
 #include "CustomDrawThread.h"
+#include "VideoThread.h"
+#include "ShowYUVThread.h"
 
 #include <ResampleThread.h>
 
@@ -145,4 +147,46 @@ void MainWindow::on_pushButton_customDraw_clicked()
 {
     CustomDrawThread *pThread = new CustomDrawThread(this);
     pThread->start();
+}
+
+void MainWindow::on_pushButton_video_clicked()
+{
+    if (_pVideoThread == nullptr)
+    {
+        _pVideoThread = new VideoThread(this);
+
+        connect(_pVideoThread, &VideoThread::finished, [this](){
+            _pVideoThread = nullptr;
+            ui->pushButton_video->setText("录制视频");
+        });
+
+        _pVideoThread->start();
+        ui->pushButton_video->setText("结束录制");
+    }
+    else
+    {
+        _pVideoThread->requestInterruption();
+        _pVideoThread = nullptr;
+        ui->pushButton_video->setText("录制视频");
+    }
+}
+
+void MainWindow::on_pushButton_showYUV_clicked()
+{
+   if (_pShowYUVThread == nullptr)
+   {
+       _pShowYUVThread = new ShowYUVThread(this);
+
+       connect(_pShowYUVThread, &ShowYUVThread::finished, [this](){
+           _pShowYUVThread = nullptr;
+           ui->pushButton_video->setText("录制视频");
+       });
+
+       _pShowYUVThread->start();
+   }
+}
+
+void MainWindow::on_pushButton_showYUVLabel_clicked()
+{
+
 }

@@ -52,6 +52,9 @@ SOURCES += \
     PlayThread.cpp \
     ResampleThread.cpp \
     ShowBMPThread.cpp \
+    ShowYUVInLabel.cpp \
+    ShowYUVThread.cpp \
+    VideoThread.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -65,10 +68,14 @@ HEADERS += \
     PlayThread.h \
     ResampleThread.h \
     ShowBMPThread.h \
+    ShowYUVInLabel.h \
+    ShowYUVThread.h \
+    VideoThread.h \
     ffmpegCmd.h \
     mainwindow.h
 
 FORMS += \
+    ShowYUVInLabel.ui \
     mainwindow.ui
 
 win32 {
