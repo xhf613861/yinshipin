@@ -202,3 +202,19 @@ void MainWindow::on_pushButton_showYUVLabel_clicked()
         _pShowYUVInLabel = nullptr;
     }
 }
+
+#include "PlayYUVVideo.h"
+
+void MainWindow::on_pushButton_playYuv_clicked()
+{
+    if (_pPlayYUVVideo == nullptr)
+    {
+        _pPlayYUVVideo = new PlayYUVVideo();
+        _pPlayYUVVideo->show();
+    }
+    else
+    {
+        delete _pPlayYUVVideo;
+        _pPlayYUVVideo = nullptr;
+    }
+}

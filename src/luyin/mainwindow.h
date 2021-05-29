@@ -14,6 +14,7 @@ class DecodeThread;
 class VideoThread;
 class ShowYUVThread;
 class ShowYUVInLabel;
+class PlayYUVVideo;
 
 class MainWindow : public QMainWindow
 {
@@ -46,6 +47,8 @@ private slots:
 
     void on_pushButton_showYUVLabel_clicked();
 
+    void on_pushButton_playYuv_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -57,5 +60,6 @@ private:
 
     ShowYUVThread *_pShowYUVThread = nullptr;
     ShowYUVInLabel *_pShowYUVInLabel = nullptr;
+    PlayYUVVideo *_pPlayYUVVideo = nullptr;
 };
 #endif // MAINWINDOW_H

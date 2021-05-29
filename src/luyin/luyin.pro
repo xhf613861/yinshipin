@@ -51,6 +51,7 @@ SOURCES += \
     FFmpegs.cpp \
     PlayThread.cpp \
     PlayYUVInLabel.cpp \
+    PlayYUVVideo.cpp \
     ResampleThread.cpp \
     ShowBMPThread.cpp \
     ShowYUVInLabel.cpp \
@@ -68,6 +69,7 @@ HEADERS += \
     FFmpegs.h \
     PlayThread.h \
     PlayYUVInLabel.h \
+    PlayYUVVideo.h \
     ResampleThread.h \
     ShowBMPThread.h \
     ShowYUVInLabel.h \
@@ -77,6 +79,7 @@ HEADERS += \
     mainwindow.h
 
 FORMS += \
+    PlayYUVVideo.ui \
     ShowYUVInLabel.ui \
     mainwindow.ui
 
