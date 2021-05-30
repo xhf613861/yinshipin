@@ -7,6 +7,7 @@ extern "C"
 #include <libavformat/avformat.h>
 #include <libavutil/avutil.h>
 #include <libavcodec/avcodec.h>
+#include <libavutil/imgutils.h>
 }
 
 #define AUDIO_FORMAT_PCM 1
@@ -52,6 +53,15 @@ typedef struct
     int chLayout;
 }AudioEncodeSpec;
 
+typedef struct
+{
+    const char *filename;
+    int width;
+    int height;
+    AVPixelFormat pixFmt;
+    int fps;
+}VideoEncodeSpec;
+
 
 class FFmpegs
 {
@@ -67,6 +77,8 @@ public:
 
     static void aacDecode(const char *inFilename,
                           AudioEncodeSpec &out);
+
+    static void h264Encode(VideoEncodeSpec &in, const char *outFilename);
 };
 
 

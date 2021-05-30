@@ -56,6 +56,7 @@ SOURCES += \
     ShowBMPThread.cpp \
     ShowYUVInLabel.cpp \
     ShowYUVThread.cpp \
+    VideoEncodeThread.cpp \
     VideoThread.cpp \
     main.cpp \
     mainwindow.cpp
@@ -74,6 +75,7 @@ HEADERS += \
     ShowBMPThread.h \
     ShowYUVInLabel.h \
     ShowYUVThread.h \
+    VideoEncodeThread.h \
     VideoThread.h \
     ffmpegCmd.h \
     mainwindow.h

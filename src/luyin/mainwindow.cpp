@@ -218,3 +218,20 @@ void MainWindow::on_pushButton_playYuv_clicked()
         _pPlayYUVVideo = nullptr;
     }
 }
+
+#include "VideoEncodeThread.h"
+void MainWindow::on_pushButton_h264Encode_clicked()
+{
+    if (_pVideoEncodeThread == nullptr)
+    {
+        _pVideoEncodeThread = new VideoEncodeThread(this);
+
+        connect(_pVideoEncodeThread, &VideoEncodeThread::finished, [this](){
+            _pVideoEncodeThread = nullptr;
+            ui->pushButton_h264Encode->setText("h264编码");
+        });
+
+        _pVideoEncodeThread->start();
+        ui->pushButton_h264Encode->setText("h264编码中");
+    }
+}

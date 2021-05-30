@@ -448,7 +448,156 @@ end:
 }
 
 
+static int check_fix_fmt(const AVCodec *codec,
+                            enum AVPixelFormat pix_fmt)
+{
+    const enum AVPixelFormat *p = codec->pix_fmts;
+    while (*p != AV_SAMPLE_FMT_NONE)
+    {
+        if (*p == pix_fmt)
+            return 1;
 
+        p++;
+    }
+
+    return 0;
+}
+
+void FFmpegs::h264Encode(VideoEncodeSpec &in, const char *outFilename)
+{
+    QFile inFile(in.filename);
+    QFile outFile(outFilename);
+
+    // 一帧图片的大小
+    int imgSize = av_image_get_buffer_size(in.pixFmt, in.width, in.height, 1);
+
+    int ret = 0;
+
+    // 编码器
+    AVCodec *codec = nullptr;
+    // 上下文
+    AVCodecContext *ctx = nullptr;
+
+    // 用来存放编码前的数据(yuv)
+    AVFrame *frame = nullptr;
+    // 用来存放编码后的数据(h264)
+    AVPacket *pkt = nullptr;
+
+
+
+
+
+
+    codec = avcodec_find_encoder_by_name("libx264");
+    if (!codec)
+    {
+        qDebug() << "encoder libx264 not found";
+        return;
+    }
+
+    // 检查采样格式
+    if (!check_fix_fmt(codec, in.pixFmt))
+    {
+        qDebug() << "Encoder does not support sample format"
+                 << av_get_pix_fmt_name(in.pixFmt);
+        return;
+    }
+
+    // 创建上下文
+    ctx = avcodec_alloc_context3(codec);
+    if (!ctx)
+    {
+        qDebug() << "avcodec_alloc_context3 error";
+        return;
+    }
+
+    ctx->width = in.width;
+    ctx->height = in.height;
+    ctx->pix_fmt = in.pixFmt;
+    // 比特率
+    ctx->time_base = {1, in.fps};
+
+    // 打开编码器
+    ret = avcodec_open2(ctx, codec, nullptr);
+    if (ret < 0)
+    {
+        ERROR_BUFF(ret);
+        qDebug() << "avcodec_open2 error" << errbuf;
+        goto end;
+    }
+
+    // 创建AVFrame
+    frame = av_frame_alloc();
+    if (!frame)
+    {
+        qDebug() << "av_frame_alloc error";
+        goto end;
+    }
+
+    frame->width = ctx->width;
+    frame->height = ctx->height;
+    frame->format = ctx->pix_fmt;
+    frame->pts = 0;
+
+    // 利用width、height、format创建缓冲区
+    ret = av_image_alloc(frame->data, frame->linesize,
+                         in.width, in.height, in.pixFmt, 1);
+    if (ret < 0)
+    {
+        ERROR_BUFF(ret);
+        qDebug() << "av_image_alloc error" << errbuf;
+        goto end;
+    }
+
+    // 创建ACVPacket
+    pkt = av_packet_alloc();
+    if (!pkt)
+    {
+        qDebug() << "av_packet_alloc error";
+        goto end;
+    }
+
+    // 打开文件
+    if (!inFile.open(QFile::ReadOnly))
+    {
+        qDebug() << "file open error" << in.filename;
+        goto end;
+    }
+
+    if (!outFile.open(QFile::WriteOnly))
+    {
+        qDebug() << "file open error" << outFilename;
+        goto end;
+    }
+
+    while ((ret = inFile.read((char *)frame->data[0],
+                              imgSize)) > 0)
+    {
+        // 编码
+        if (encode(ctx, frame, pkt, outFile) < 0)
+            goto end;
+
+        // 设置帧的序号
+        frame->pts++;
+    }
+
+    // flush编码器
+    encode(ctx, nullptr, pkt, outFile);
+
+end:
+    inFile.close();
+    outFile.close();
+
+    // 释放资源
+    if (frame)
+    {
+        av_freep(&frame->data[0]);
+        av_frame_free(&frame);
+    }
+
+    av_packet_free(&pkt);
+    avcodec_free_context(&ctx);
+}
 
 
 

@@ -261,6 +261,19 @@
      <string>播放YUV视频</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_h264Encode">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>370</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>h264编码</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
